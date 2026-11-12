@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Minhas Indicações</title>
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f2f2f2; /* Fundo cinza claro */
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background-color: #fff;
+      max-width: 500px;
+      width: 100%;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-aluno {
+      background-color: #2D4B7B;
+      color: #fff;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+
+    .info-aluno p {
+      margin: 5px 0;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      color: #2D4B7B;
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #2D4B7B;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #24406e;
+    }
+
+    .indicacoes-list {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+    }
+    
+    .regras {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+      input, select {
+        font-size: 14px;
+      }
+      button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Informações do Aluno -->
+    <div class="info-aluno">
+      <p><strong>Nome do Aluno:</strong> <span id="info-nome"></span></p>
+      <p><strong>Polo:</strong> <span id="info-polo"></span></p>
+      <p><strong>RA:</strong> <span id="info-ra"></span></p>
+    </div>
+    
+    
+      <!-- Regras -->
+  <section class="secao-cinza" style="text-align: justify;">
+    <h1 style="text-align: center;">Regras do Sorteio</h1>
+    <p>> Precisa estar ativo como aluno e não ter pendências financeiras. 
+    <br>> Ser seguidor do nosso Instagram: @unicesumar.madureira.
+    <br>> Ao participar, está de acordo em ter seu nome divulgado em nossas redes sociais ou canais da empresa.
+    <br>> O prêmio será depositado até o dia 15 do mês do sorteio, mediante a contato para confirmação dos dados.
+    <br><br>
+     Insira abaixo o nome do seu indicado (um de cada vez)
+     <br><br>
+    </p>
+  </section>
+
+    <!-- Formulário de Indicação -->
+    <form id="indicacao-form">
+      <label for="nome_indicado">Nome do Indicado:</label>
+      <input type="text" id="nome_indicado" placeholder="Ex: João da Silva" required/>
+
+      <label for="telefone">Telefone/WhatsApp:</label>
+      <input type="text" id="telefone" placeholder="(21)99999-9999" required/>
+
+      <label for="grau_indicacao">Grau da Indicação:</label>
+      <select id="grau_indicacao" required>
+        <option value="">Selecione</option>
+        <option value="Pai">Pai</option>
+        <option value="Mãe">Mãe</option>
+        <option value="Filho">Filho</option>
+        <option value="Filha">Filha</option>
+        <option value="Marido">Marido</option>
+        <option value="Mulher">Mulher</option>
+        <option value="Amigo">Amigo</option>
+      </select>
+
+      <button type="submit">Enviar Indicação</button>
+    </form>
+
+    <!-- Lista de Indicações do Mês -->
+    <div class="indicacoes-list" id="lista-indicacoes">
+      <!-- Será preenchido via JavaScript -->
+    </div>
+  </div>
+
+  <!-- Biblioteca do Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    // Ajuste para o seu projeto
+    const SUPABASE_URL = 'https://edaoxygutreaawmvzflz.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkYW94eWd1dHJlYWF3bXZ6Zmx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk4MTUxNjYsImV4cCI6MjA1NTM5MTE2Nn0.y2-VDjy0fFTtoE7AzNL86rFluThh9Yq13O6RTYhgc-A';
+    const mySupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Recupera dados do aluno (já salvos no localStorage pelo index.html)
+    const alunoNome = localStorage.getItem('aluno_nome') || 'Não informado';
+    const alunoPolo = localStorage.getItem('aluno_polo') || 'Não informado';
+    const alunoRA = localStorage.getItem('aluno_ra') || 'Não informado';
+    const alunoConsultor = localStorage.getItem('aluno_consultor') || 'Nenhum consultor';
+
+    // Exibe as informações do aluno
+    document.getElementById('info-nome').textContent = alunoNome;
+    document.getElementById('info-polo').textContent = alunoPolo;
+    document.getElementById('info-ra').textContent = alunoRA;
+
+    // == Autoformatação do campo "telefone" para o Indicado ==
+    function maskPhone(value) {
+      // Remove tudo que não é dígito
+      value = value.replace(/\D/g, '');
+      // Limita a 11 dígitos
+      if (value.length > 11) {
+        value = value.substring(0, 11);
+      }
+      // Se tiver 10 dígitos: (XX)XXXX-XXXX
+      // Se tiver 11 dígitos: (XX)XXXXX-XXXX
+      let formatted = '';
+      const len = value.length;
+
+      if (len > 0) {
+        formatted = '(' + value.substring(0, 2);
+      }
+      if (len >= 3) {
+        formatted += ')' + value.substring(2, len >= 7 ? 7 : len);
+      }
+      if (len >= 7) {
+        formatted += '-' + value.substring(7);
+      }
+
+      return formatted;
+    }
+
+    const telefoneInput = document.getElementById('telefone');
+    telefoneInput.addEventListener('input', () => {
+      telefoneInput.value = maskPhone(telefoneInput.value);
+    });
+
+    // Formulário de Indicação
+    const formIndicacao = document.getElementById('indicacao-form');
+    formIndicacao.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nomeIndicado = document.getElementById('nome_indicado').value;
+      const telefone = document.getElementById('telefone').value;
+      const grau = document.getElementById('grau_indicacao').value;
+
+      await inserirIndicacao(nomeIndicado, telefone, grau);
+      formIndicacao.reset();
+    });
+
+    // Insere a indicação, gerando número no formato "MMYY0001" (não reinicia)
+    async function inserirIndicacao(nomeIndicado, telefone, grau) {
+      const numeroSequencial = await obterProximoNumeroSequencial();
+
+      const { data, error } = await mySupabase
+        .from('indicacoes')
+        .insert([{
+          aluno_nome: alunoNome,
+          aluno_polo: alunoPolo,
+          aluno_ra: alunoRA,
+          consultor: alunoConsultor,
+          nome_indicado: nomeIndicado,
+          telefone: telefone, // já formatado
+          grau_indicacao: grau,
+          numero_sequencial: numeroSequencial
+        }]);
+
+      if (error) {
+        console.error('Erro ao inserir indicação:', error);
+        alert('Ocorreu um erro ao enviar a indicação.');
+      } else {
+        alert('Indicação enviada com sucesso!');
+        carregarIndicacoesDoMes();
+      }
+    }
+
+    async function obterProximoNumeroSequencial() {
+      const { data, error } = await mySupabase
+        .from('indicacoes')
+        .select('numero_sequencial')
+        .order('numero_sequencial', { ascending: false })
+        .limit(1);
+
+      if (error) {
+        console.error('Erro ao buscar maior numero_sequencial:', error);
+        return '00000001'; // fallback
+      }
+
+      let lastSeq = 0;
+      if (data && data.length > 0 && data[0].numero_sequencial) {
+        const lastNum = String(data[0].numero_sequencial);
+        const last4 = lastNum.slice(-4);
+        lastSeq = parseInt(last4, 10);
+      }
+      const newSeq = lastSeq + 1;
+
+      const now = new Date();
+      const mes = String(now.getMonth() + 1).padStart(2, '0');
+      const ano2 = String(now.getFullYear()).slice(-2);
+
+      const seqStr = String(newSeq).padStart(4, '0');
+      return mes + ano2 + seqStr;
+    }
+
+    // Carrega as indicações do aluno no mês atual
+    async function carregarIndicacoesDoMes() {
+      const { startISO, endISO } = getMonthRangeLocal();
+
+      const { data, error } = await mySupabase
+        .from('indicacoes')
+        .select('*')
+        .eq('aluno_ra', alunoRA)
+        .gte('created_at', startISO)
+        .lt('created_at', endISO)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Erro ao carregar indicações:', error);
+        return;
+      }
+
+      montarLista(data);
+    }
+
+    function montarLista(lista) {
+      const listaEl = document.getElementById('lista-indicacoes');
+      if (!lista || lista.length === 0) {
+        listaEl.innerHTML = '<p>Nenhuma indicação neste mês.</p>';
+        return;
+      }
+
+      const html = lista.map((item) => {
+        return `
+          <div style="margin-bottom:10px; border-bottom:1px solid #ccc; padding:5px;">
+            <p><strong>Indicado:</strong> ${item.nome_indicado}</p>
+            <p><strong>Telefone:</strong> ${item.telefone}</p>
+            <p><strong>Grau:</strong> ${item.grau_indicacao}</p>
+            <p><strong>Número Sorteio (Global):</strong> ${item.numero_sequencial || '-'}</p>
+            <p><strong>Consultor:</strong> ${item.consultor || '-'}</p>
+          </div>
+        `;
+      }).join('');
+
+      listaEl.innerHTML = `<h3>Suas Indicações do Mês</h3>${html}`;
+    }
+
+    // Define início/fim do mês local e converte para ISO
+    function getMonthRangeLocal() {
+      const agora = new Date();
+      const ano = agora.getFullYear();
+      const mes = agora.getMonth(); // 0..11
+
+      const startLocal = new Date(ano, mes, 1, 0, 0, 0);
+      const endLocal = new Date(ano, mes + 1, 1, 0, 0, 0);
+
+      const startISO = startLocal.toISOString();
+      const endISO = endLocal.toISOString();
+
+      return { startISO, endISO };
+    }
+
+    // Ao abrir a página, carrega as indicações do mês
+    carregarIndicacoesDoMes();
+  </script>
+</body>
+</html>

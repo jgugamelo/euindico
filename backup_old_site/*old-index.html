@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - UniCesumar</title>
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f2f2f2; /* Fundo cinza claro */
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Banner de Prêmios */
+    .banner-premios {
+      background-color: #fff;
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .banner-premios h2 {
+      color: #2D4B7B;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+    .imagens-premios {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .imagens-premios img {
+      max-width: 200px;
+      width: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    /* Container do Formulário */
+    .container {
+      background-color: #fff;
+      max-width: 400px;
+      width: 100%;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #2D4B7B;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button[type="submit"] {
+      background-color: #2D4B7B;
+      color: #fff;
+      padding: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #24406e;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+      button[type="submit"] {
+        font-size: 16px;
+      }
+      .banner-premios h2 {
+        font-size: 18px;
+      }
+      .imagens-premios img {
+        max-width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner de Prêmios -->
+  <div class="banner-premios">
+    <h2 id="titulo-premios"></h2>
+    <div class="imagens-premios">
+      <img src="premio01.png" alt="Prêmio 1">
+      <img src="premio02.png" alt="Prêmio 2">
+      <img src="premio03.png" alt="Prêmio 3">
+    </div>
+  </div>
+
+  <!-- Container com o Formulário de Login -->
+  <div class="container">
+    <!-- Logo da Instituição -->
+    <div class="logo">
+      <img src="Logo-UniCesumar-horizontal-cor.png" alt="Logo UniCesumar" />
+    </div>
+
+    <!-- Formulário de Login -->
+    <form id="login-form">
+      <div class="form-group">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" placeholder="Digite seu nome" required />
+      </div>
+
+      <div class="form-group">
+        <label for="polo">Polo:</label>
+        <select id="polo" required>
+          <option value="">Selecione seu Polo</option>
+          <option value="Duque de Caxias - 25 de Agosto">Duque de Caxias - 25 de Agosto</option>
+          <option value="Duque de Caxias - Centro">Duque de Caxias - Centro</option>
+          <option value="Vila São Luís">Vila São Luís</option>
+          <option value="Jardim Primavera">Jardim Primavera</option>
+          <option value="Madureira">Madureira</option>
+          <option value="Méier">Méier</option>
+          <option value="Centro - RJ">Centro - RJ</option>
+          <option value="Ilha do Governador">Ilha do Governador</option>
+          <option value="Vila da Penha">Vila da Penha</option>
+          <option value="Irajá">Irajá</option>
+          <option value="Laranjeiras">Laranjeiras</option>
+        </select>
+      </div>
+
+      <!-- RA com autoformatação -->
+      <div class="form-group">
+        <label for="ra">RA:</label>
+        <input
+          type="text"
+          id="ra"
+          placeholder="Ex: 21085143-5"
+          required
+        />
+      </div>
+
+      <!-- Telefone com autoformatação -->
+      <div class="form-group">
+        <label for="telefone">Telefone/WhatsApp:</label>
+        <input
+          type="text"
+          id="telefone"
+          placeholder="(21)99999-3305"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="consultor">Gostaria de direcionar as suas indicações para:</label>
+        <select id="consultor" required>
+          <option value="">Selecione</option>
+          <option value="Adriene">Adriene</option>
+          <option value="Alessandra">Alessandra</option>
+          <option value="Ana Paula">Ana Paula</option>
+          <option value="André">André</option>
+          <option value="Arilson">Arilson</option>
+          <option value="Brendha">Brendha</option>
+          <option value="Caio">Caio</option>
+          <option value="Camila">Camila</option>
+          <option value="Camilla Rangel">Camilla Rangel</option>
+          <option value="Diego">Diego</option>
+          <option value="Dinália">Dinália</option>
+          <option value="Érika">Érika</option>
+          <option value="Giselle">Giselle</option>
+          <option value="Gleice">Gleice</option>
+          <option value="Ítalo">Ítalo</option>
+          <option value="Ivison">Ivison</option>
+          <option value="Izabor">Izabor</option>
+          <option value="Lohana">Lohana</option>
+          <option value="Loraine">Loraine</option>
+          <option value="Márcia">Márcia</option>
+          <option value="Marcos">Marcos</option>
+          <option value="Rafaela">Rafaela</option>
+          <option value="Rayanne">Rayanne</option>
+          <option value="Sheila">Sheila</option>
+          <option value="Talita">Talita</option>
+          <option value="Nenhum consultor">Nenhum consultor</option>
+        </select>
+      </div>
+
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+
+  <script>
+    // Exemplo de cálculo do "mês seguinte" dinamicamente
+    (function() {
+      const now = new Date();
+      let nextMonth = now.getMonth() + 1; // 0..11 => nextMonth = 1..12
+      let year = now.getFullYear();
+
+      // Se "próximo mês" for dezembro (11), o seguinte seria janeiro (0) do ano seguinte
+      if (nextMonth === 12) {
+        nextMonth = 0;
+        year++;
+      }
+
+      const mesNomes = [
+        "janeiro", "fevereiro", "março", "abril", "maio", "junho",
+        "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+      ];
+
+      document.getElementById('titulo-premios').textContent =
+        "Prêmios para o mês de " + mesNomes[nextMonth] + " de " + year;
+    })();
+
+    // Função para autoformatar o RA (até 10 dígitos, hífen antes do último)
+    function maskRA(value) {
+      // Remove tudo que não é dígito
+      value = value.replace(/\D/g, '');
+      // Limita a 9 dígitos
+      if (value.length > 10) {
+        value = value.substring(0, 10);
+      }
+      // Se tiver até 8 dígitos, não insere hífen
+      // Se tiver 9 dígitos, insere hífen antes do último
+      if (value.length <= 8) {
+        return value;
+      } else {
+        // Ex: 21085143 e o último 5 => 21085143-5
+        return value.substring(0, value.length - 1) + '-' + value.substring(value.length - 1);
+      }
+    }
+
+    // Função para autoformatar telefone (DD) + 4 ou 5 + 4
+    function maskPhone(value) {
+      // Remove tudo que não é dígito
+      value = value.replace(/\D/g, '');
+      // Limita a 11 dígitos
+      if (value.length > 11) {
+        value = value.substring(0, 11);
+      }
+      // Se tiver 10 dígitos: (XX)XXXX-XXXX
+      // Se tiver 11 dígitos: (XX)XXXXX-XXXX
+      let formatted = '';
+      const len = value.length;
+
+      if (len > 0) {
+        formatted = '(' + value.substring(0, 2);
+      }
+      if (len >= 3) {
+        // Se tiver pelo menos 3 dígitos, fecha parêntese
+        // Ex: (21)
+        formatted += ')' + value.substring(2, len >= 7 ? 7 : len);
+      }
+      if (len >= 7) {
+        // Se tiver 7 ou mais, insere hífen
+        formatted += '-' + value.substring(7);
+      }
+
+      return formatted;
+    }
+
+    const raInput = document.getElementById('ra');
+    const telefoneInput = document.getElementById('telefone');
+
+    raInput.addEventListener('input', () => {
+      const pos = raInput.selectionStart; // Posição do cursor (simples)
+      const oldVal = raInput.value;
+      raInput.value = maskRA(oldVal);
+      // Ajuste opcional de cursor se quiser
+    });
+
+    telefoneInput.addEventListener('input', () => {
+      const oldVal = telefoneInput.value;
+      telefoneInput.value = maskPhone(oldVal);
+    });
+
+    // Formulário de Login
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const nome = document.getElementById('nome').value;
+      const polo = document.getElementById('polo').value;
+      const ra = document.getElementById('ra').value;
+      const telefone = document.getElementById('telefone').value;
+      const consultor = document.getElementById('consultor').value;
+
+      // Salvando dados em localStorage
+      localStorage.setItem('aluno_nome', nome);
+      localStorage.setItem('aluno_polo', polo);
+      localStorage.setItem('aluno_ra', ra);
+      localStorage.setItem('aluno_telefone', telefone);
+      localStorage.setItem('aluno_consultor', consultor);
+
+      // Redirecionar para a página de indicações
+      window.location.href = 'indicacoes.html';
+    });
+  </script>
+</body>
+</html>

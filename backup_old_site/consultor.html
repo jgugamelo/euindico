@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Área do Consultor</title>
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .main-container {
+      width: 100%;
+      max-width: 1000px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #2D4B7B;
+      font-size: 24px;
+      text-align: center;
+    }
+    /* Cartão para formulários (primeiro acesso, login) */
+    .card {
+      background-color: #fff;
+      max-width: 400px;
+      width: 100%;
+      margin: 0 auto 20px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    .card h2 {
+      margin-bottom: 10px;
+      color: #2D4B7B;
+      font-size: 18px;
+      text-align: center;
+    }
+    .card p {
+      color: #2D4B7B;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .card label {
+      font-weight: bold;
+      color: #2D4B7B;
+      margin-top: 10px;
+    }
+    .card input,
+    .card select {
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .card input[readonly] {
+      background-color: #eee;
+      color: #333;
+      cursor: not-allowed;
+    }
+    .card button {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #2D4B7B;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .card button:hover {
+      background-color: #24406e;
+    }
+    /* Seção de Leads do Consultor */
+    #consultor-section {
+      display: none;
+      background-color: #fff;
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    #consultor-section h2 {
+      margin-bottom: 20px;
+      color: #2D4B7B;
+      font-size: 20px;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .filters label {
+      color: #2D4B7B;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    .filters input {
+      padding: 6px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .filters button {
+      background-color: #2D4B7B;
+      color: #fff;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-left: 10px;
+      height: 40px;
+      align-self: flex-end;
+    }
+    .filters button:hover {
+      background-color: #24406e;
+    }
+    #export-buttons {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    #export-buttons button {
+      margin-right: 10px;
+      padding: 8px 16px;
+      background-color: #2D4B7B;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    #export-buttons button:hover {
+      background-color: #24406e;
+    }
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      min-width: 800px;
+    }
+    table thead tr {
+      background-color: #2D4B7B;
+      color: #fff;
+    }
+    table th, table td {
+      padding: 8px;
+      border: 1px solid #ccc;
+      text-align: left;
+      font-size: 14px;
+    }
+    table th input[type="checkbox"],
+    table td input[type="checkbox"] {
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+    /* Ajusta o padding do input de Observações */
+    td input[type="text"] {
+      padding: 4px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    /* Responsividade */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 20px;
+      }
+      .filters {
+        flex-direction: column;
+      }
+      table {
+        min-width: 600px;
+      }
+    }
+    @media (max-width: 480px) {
+      table {
+        min-width: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <h1>Área do Consultor</h1>
+    
+    <!-- Primeiro Acesso (Criar Senha) -->
+    <form id="first-access-form" class="card" style="display:none;">
+      <h2>Primeiro Acesso</h2>
+      <p>Crie sua senha</p>
+      <label for="consultor-nome">Nome do Consultor:</label>
+      <select id="consultor-nome" required>
+        <option value="">Selecione</option>
+        <option value="Adriene">Adriene</option>
+        <option value="Alessandra">Alessandra</option>
+        <option value="Ana Paula">Ana Paula</option>
+        <option value="André">André</option>
+        <option value="Arilson">Arilson</option>
+        <option value="Brendha">Brendha</option>
+        <option value="Caio">Caio</option>
+        <option value="Camila">Camila</option>
+        <option value="Diego">Diego</option>
+        <option value="Dinália">Dinália</option>
+        <option value="Érika">Érika</option>
+        <option value="Gisele Melo">Gisele Melo</option>
+        <option value="Giselle">Giselle</option>
+        <option value="Gleice">Gleice</option>
+        <option value="Ítalo">Ítalo</option>
+        <option value="Ivison">Ivison</option>
+        <option value="Izabor">Izabor</option>
+        <option value="Lohana">Lohana</option>
+        <option value="Loraine">Loraine</option>
+        <option value="Márcia">Márcia</option>
+        <option value="Marcos">Marcos</option>
+        <option value="Nathalia">Nathalia</option>
+        <option value="Rafaela">Rafaela</option>
+        <option value="Rayanne">Rayanne</option>
+        <option value="Roberto">Roberto</option>
+        <option value="Sheila">Sheila</option>
+        <option value="Stella">Stella</option>
+        <option value="Talita">Talita</option>
+        <option value="Nenhum consultor">Nenhum consultor</option>
+      </select>
+      <label for="senha-nova">Crie sua Senha:</label>
+      <input type="password" id="senha-nova" required />
+      <button type="submit">Salvar Senha</button>
+    </form>
+    
+    <!-- Formulário de Login do Consultor -->
+    <form id="consultor-login" class="card" style="display:none;">
+      <h2>Login do Consultor</h2>
+      <p>Favor inserir sua senha</p>
+      <label for="consultor-nome-login">Nome do Consultor:</label>
+      <input type="text" id="consultor-nome-login" readonly />
+      <label for="consultor-senha">Senha:</label>
+      <input type="password" id="consultor-senha" required />
+      <button type="submit">Acessar</button>
+    </form>
+    
+    <!-- Seção com os Leads do Consultor -->
+    <div id="consultor-section">
+      <h2>Seus Leads</h2>
+      <!-- Filtros -->
+      <div class="filters">
+        <div>
+          <label for="data-inicial">Data Inicial:</label>
+          <input type="date" id="data-inicial">
+        </div>
+        <div>
+          <label for="data-final">Data Final:</label>
+          <input type="date" id="data-final">
+        </div>
+        <div>
+          <label for="filtro-ra">RA do Aluno:</label>
+          <input type="text" id="filtro-ra" placeholder="Ex: 2025111111-5">
+        </div>
+        <button id="btn-filtrar">Filtrar</button>
+      </div>
+      
+      <!-- Botões de exportação -->
+      <div id="export-buttons">
+        <button id="btn-export-csv">Exportar Excel (CSV)</button>
+        <button id="btn-export-pdf">Exportar PDF</button>
+      </div>
+      
+      <div class="table-responsive">
+        <table id="tabela-consultor">
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="checkAll"></th>
+              <th>ID</th>
+              <th>Data/Hora</th>
+              <th>Nome do Aluno</th>
+              <th>RA</th>
+              <th>Polo</th>
+              <th>Nome Indicado</th>
+              <th>Telefone</th>
+              <th>Grau</th>
+              <th>Número Sorteio</th>
+              <th>Matriculado</th>
+              <th>Observações</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Preenchido via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Biblioteca Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <!-- jsPDF + AutoTable (PDF) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  
+  <script>
+    // Configuração do Supabase
+    const SUPABASE_URL = 'https://edaoxygutreaawmvzflz.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkYW94eWd1dHJlYWF3bXZ6Zmx6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk4MTUxNjYsImV4cCI6MjA1NTM5MTE2Nn0.y2-VDjy0fFTtoE7AzNL86rFluThh9Yq13O6RTYhgc-A';
+    const mySupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    // Verifica se é primeiro acesso ou login
+    const params = new URLSearchParams(window.location.search);
+    const consultorQuery = params.get('nome'); // se vier ?nome=Fulano, exibe login
+    
+    const firstAccessForm = document.getElementById('first-access-form');
+    const consultorLoginForm = document.getElementById('consultor-login');
+    const consultorSection = document.getElementById('consultor-section');
+    
+    const consultorNomeLogin = document.getElementById('consultor-nome-login');
+    const consultorSenhaInput = document.getElementById('consultor-senha');
+    
+    if (consultorQuery) {
+      consultorLoginForm.style.display = 'flex';
+      consultorNomeLogin.value = consultorQuery;
+    } else {
+      firstAccessForm.style.display = 'flex';
+    }
+    
+    // Primeiro Acesso
+    firstAccessForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nome = document.getElementById('consultor-nome').value;
+      const senhaNova = document.getElementById('senha-nova').value;
+      // Salva no localStorage
+      localStorage.setItem(`consultorPass-${nome}`, senhaNova);
+      alert(`Senha criada para o consultor ${nome}! Redirecionando para o login...`);
+      const encodedNome = encodeURIComponent(nome);
+      window.location.href = `consultor.html?nome=${encodedNome}`;
+    });
+    
+    // Login do Consultor
+    consultorLoginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nomeLogin = consultorNomeLogin.value;
+      const senhaDigitada = consultorSenhaInput.value;
+      const senhaArmazenada = localStorage.getItem(`consultorPass-${nomeLogin}`) || '';
+      
+      if (!senhaArmazenada) {
+        alert('Este consultor não tem senha cadastrada ou nome incorreto!');
+        return;
+      }
+      if (senhaArmazenada !== senhaDigitada) {
+        alert('Senha incorreta!');
+        return;
+      }
+      consultorLoginForm.style.display = 'none';
+      consultorSection.style.display = 'block';
+      carregarLeadsConsultor(nomeLogin);
+    });
+    
+    // Filtros
+    const btnFiltrar = document.getElementById('btn-filtrar');
+    const dataInicial = document.getElementById('data-inicial');
+    const dataFinal = document.getElementById('data-final');
+    const filtroRA = document.getElementById('filtro-ra');
+    
+    const tabelaBody = document.querySelector('#tabela-consultor tbody');
+    const checkAll = document.getElementById('checkAll');
+    
+    btnFiltrar.addEventListener('click', () => {
+      const nomeLogin = consultorNomeLogin.value;
+      carregarLeadsConsultor(nomeLogin);
+    });
+    
+    // Carrega leads
+    async function carregarLeadsConsultor(consultorNome) {
+      let query = mySupabase
+        .from('indicacoes')
+        .select('*')
+        .eq('consultor', consultorNome)
+        .order('created_at', { ascending: false });
+      
+      if (dataInicial.value) {
+        query = query.gte('created_at', dataInicial.value + 'T00:00:00');
+      }
+      if (dataFinal.value) {
+        query = query.lte('created_at', dataFinal.value + 'T23:59:59');
+      }
+      if (filtroRA.value) {
+        query = query.eq('aluno_ra', filtroRA.value);
+      }
+      
+      const { data, error } = await query;
+      if (error) {
+        console.error('Erro ao carregar leads do consultor:', error);
+        alert('Não foi possível carregar as indicações.');
+        return;
+      }
+      montarTabelaConsultor(data);
+    }
+    
+    // Monta tabela
+    function montarTabelaConsultor(lista) {
+      tabelaBody.innerHTML = '';
+      checkAll.checked = false;
+      
+      if (!lista || lista.length === 0) {
+        tabelaBody.innerHTML = '<tr><td colspan="13">Nenhuma indicação encontrada.</td></tr>';
+        return;
+      }
+      
+      lista.forEach((item) => {
+        // Cada linha terá um "estado" local para saber se algo foi alterado
+        let originalMatriculado = !!item.matriculado;
+        let originalObservacoes = item.observacoes || "";
+        
+        const row = document.createElement('tr');
+        
+        // Checkbox de seleção
+        const tdCheck = document.createElement('td');
+        const chkRow = document.createElement('input');
+        chkRow.type = 'checkbox';
+        chkRow.classList.add('row-check');
+        tdCheck.appendChild(chkRow);
+        row.appendChild(tdCheck);
+        
+        // ID
+        const tdId = document.createElement('td');
+        tdId.textContent = item.id;
+        row.appendChild(tdId);
+        
+        // Data/Hora
+        const tdData = document.createElement('td');
+        if (item.created_at) {
+          const dt = new Date(item.created_at);
+          tdData.textContent = dt.toLocaleString('pt-BR');
+        } else {
+          tdData.textContent = '-';
+        }
+        row.appendChild(tdData);
+        
+        // Nome do Aluno
+        const tdNome = document.createElement('td');
+        tdNome.textContent = item.aluno_nome || '-';
+        row.appendChild(tdNome);
+        
+        // RA
+        const tdRA = document.createElement('td');
+        tdRA.textContent = item.aluno_ra || '-';
+        row.appendChild(tdRA);
+        
+        // Polo
+        const tdPolo = document.createElement('td');
+        tdPolo.textContent = item.aluno_polo || '-';
+        row.appendChild(tdPolo);
+        
+        // Nome Indicado
+        const tdIndicado = document.createElement('td');
+        tdIndicado.textContent = item.nome_indicado || '-';
+        row.appendChild(tdIndicado);
+        
+        // Telefone
+        const tdTelefone = document.createElement('td');
+        tdTelefone.textContent = item.telefone || '-';
+        row.appendChild(tdTelefone);
+        
+        // Grau
+        const tdGrau = document.createElement('td');
+        tdGrau.textContent = item.grau_indicacao || '-';
+        row.appendChild(tdGrau);
+        
+        // Número Sorteio
+        const tdNum = document.createElement('td');
+        tdNum.textContent = item.numero_sequencial || '-';
+        row.appendChild(tdNum);
+        
+        // Matriculado (checkbox, mas não atualiza diretamente)
+        const tdMatriculado = document.createElement('td');
+        const chkMatriculado = document.createElement('input');
+        chkMatriculado.type = 'checkbox';
+        chkMatriculado.checked = originalMatriculado;
+        chkMatriculado.addEventListener('change', () => {
+          // apenas marca como alterado, sem update imediato
+          originalMatriculado = chkMatriculado.checked;
+          btnSalvar.disabled = false;
+        });
+        tdMatriculado.appendChild(chkMatriculado);
+        row.appendChild(tdMatriculado);
+        
+        // Observações (input texto)
+        const tdObs = document.createElement('td');
+        const inputObs = document.createElement('input');
+        inputObs.type = 'text';
+        inputObs.value = originalObservacoes;
+        inputObs.addEventListener('input', () => {
+          // se houver mudança, habilita o botão Salvar
+          btnSalvar.disabled = false;
+        });
+        tdObs.appendChild(inputObs);
+        row.appendChild(tdObs);
+        
+        // Ações: Botão "Salvar"
+        const tdAcoes = document.createElement('td');
+        const btnSalvar = document.createElement('button');
+        btnSalvar.textContent = 'Salvar';
+        btnSalvar.disabled = true; // só habilita se houver mudança
+        btnSalvar.addEventListener('click', async () => {
+          // Realiza update no Supabase
+          const { error } = await mySupabase
+            .from('indicacoes')
+            .update({
+              matriculado: chkMatriculado.checked,
+              observacoes: inputObs.value
+            })
+            .eq('id', item.id);
+          if (error) {
+            alert('Erro ao atualizar no Supabase');
+            console.error(error);
+          } else {
+            // se deu certo, desabilita o botão de salvar
+            alert('Registro atualizado com sucesso!');
+            btnSalvar.disabled = true;
+          }
+        });
+        tdAcoes.appendChild(btnSalvar);
+        row.appendChild(tdAcoes);
+        
+        tabelaBody.appendChild(row);
+      });
+    }
+    
+    // "Selecionar Todos"
+    checkAll.addEventListener('change', () => {
+      const rowChecks = document.querySelectorAll('.row-check');
+      rowChecks.forEach((chk) => {
+        chk.checked = checkAll.checked;
+      });
+    });
+    
+    // Exportar CSV
+    const btnExportCsv = document.getElementById('btn-export-csv');
+    btnExportCsv.addEventListener('click', () => {
+      exportToCSV('consultor-leads.csv');
+    });
+    function exportToCSV(filename) {
+      const table = document.getElementById('tabela-consultor');
+      const allRows = table.querySelectorAll('tbody tr');
+      // Filtra apenas as selecionadas
+      const selectedRows = [...allRows].filter(row => {
+        const chk = row.querySelector('.row-check');
+        return chk && chk.checked;
+      });
+      // Se nenhuma selecionada => exportar tudo
+      const rowsToExport = selectedRows.length > 0 ? selectedRows : allRows;
+      
+      let csvContent = "";
+      // Cabeçalho (ignora a 1a coluna)
+      const headerRow = table.querySelector('thead tr');
+      if (headerRow) {
+        const cols = headerRow.querySelectorAll('th');
+        const rowData = [];
+        for (let i = 1; i < cols.length; i++) {
+          let text = cols[i].innerText.replace(/"/g, '""');
+          rowData.push(`"${text}"`);
+        }
+        csvContent += rowData.join(";") + "\n";
+      }
+      // Dados
+      rowsToExport.forEach((row) => {
+        const cols = row.querySelectorAll('td');
+        const rowData = [];
+        for (let i = 1; i < cols.length; i++) {
+          let text = cols[i].innerText.replace(/"/g, '""');
+          rowData.push(`"${text}"`);
+        }
+        csvContent += rowData.join(";") + "\n";
+      });
+      csvContent = "\ufeff" + csvContent; // BOM UTF-8
+      
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    
+    // Exportar PDF
+    const btnExportPdf = document.getElementById('btn-export-pdf');
+    btnExportPdf.addEventListener('click', () => {
+      exportToPDF('consultor-leads.pdf');
+    });
+    function exportToPDF(filename) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'pt');
+      const clonedTable = gerarTabelaPDF('tabela-consultor');
+      doc.autoTable({
+        html: clonedTable,
+        startY: 20,
+        theme: 'grid'
+      });
+      doc.save(filename);
+    }
+    function gerarTabelaPDF(tableId) {
+      const originalTable = document.getElementById(tableId);
+      const clone = originalTable.cloneNode(true);
+      
+      const tbody = clone.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const selectedRows = rows.filter((row) => {
+        const chk = row.querySelector('.row-check');
+        return chk && chk.checked;
+      });
+      // Se nenhuma selecionada => exporta tudo
+      const rowsToExport = selectedRows.length > 0 ? selectedRows : rows;
+      
+      // Remove as não selecionadas
+      rows.forEach((row) => {
+        if (!rowsToExport.includes(row)) row.remove();
+      });
+      // Remove a 1ª coluna (checkbox) do thead e do tbody
+      const theadRow = clone.querySelector('thead tr');
+      if (theadRow) {
+        theadRow.removeChild(theadRow.children[0]);
+      }
+      rowsToExport.forEach((row) => {
+        row.removeChild(row.children[0]);
+      });
+      return clone;
+    }
+  </script>
+</body>
+</html>
