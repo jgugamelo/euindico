@@ -1,8 +1,0 @@
-RewriteEngine On
-RewriteBase /euindico/
-
-# Se alguém digitar /euindico/adm, abrir adm.html
-RewriteRule ^adm$ adm.html [QSA,L]
-
-# Se alguém digitar /euindico/consultor, abrir consultor.html
-RewriteRule ^consultor$ consultor.html [QSA,L]
