@@ -1,2 +1,2 @@
 :HL["/euindico/_next/static/chunks/22vcg6wu7uqcj.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"consultor","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"c2p2LUPnSEI_s0S1lZk8-"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"consultor","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"QXJYG8JJDtMWfQhhhruE3"}
